@@ -21,25 +21,18 @@ func main() {
 	for _, box := range boxes {
 		cs := map[rune]int{}
 		for _, c := range box {
-			if _, ok := cs[c]; !ok {
-				cs[c] = 0
-			}
 			cs[c]++
 		}
 		c2, c3 := false, false
 		for _, v := range cs {
-			if v == 2 {
+			if v == 2 && !c2 {
+				two++
 				c2 = true
 			}
-			if v == 3 {
+			if v == 3 && !c3 {
+				three++
 				c3 = true
 			}
-		}
-		if c2 {
-			two++
-		}
-		if c3 {
-			three++
 		}
 	}
 	fmt.Println("checksum: ", two*three)
