@@ -19,6 +19,7 @@ func main() {
 	fmt.Println("drift: ", sum)
 
 	// part 2
+	// store visited in set
 	curr := 0
 	vis := map[int]struct{}{0: struct{}{}}
 	for {
