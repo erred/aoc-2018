@@ -33,17 +33,17 @@ func main() {
 	steps := []string{}
 	for len(rawSteps1) > 0 {
 		avail := []int{}
-		for k, v := range rawSteps1 {
-			if len(v) == 0 {
-				avail = append(avail, k)
+		for todo, blockers := range rawSteps1 {
+			if len(blockers) == 0 {
+				avail = append(avail, todo)
 			}
 		}
 		sort.Ints(avail)
 		steps = append(steps, string(rune(avail[0])))
-		for k, v := range rawSteps1 {
-			for kk, _ := range v {
-				if kk == avail[0] {
-					delete(rawSteps1[k], kk)
+		for todo, blockers := range rawSteps1 {
+			for blocker := range blockers {
+				if blocker == avail[0] {
+					delete(rawSteps1[todo], blocker)
 				}
 			}
 		}
@@ -57,34 +57,34 @@ func main() {
 	t := 0
 	for len(rawSteps2) > 0 {
 		avail := []int{}
-		for k, v := range rawSteps2 {
-			if len(v) == 0 {
-				avail = append(avail, k)
+		for todo, blockers := range rawSteps2 {
+			if len(blockers) == 0 {
+				avail = append(avail, todo)
 			}
 		}
 		sort.Ints(avail)
 
-		for _, v := range avail {
-			if _, ok := workers[v]; !ok && len(workers) < 5 {
-				workers[v] = t + v - int('A') + 61
+		for _, todo := range avail {
+			if _, ok := workers[todo]; !ok && len(workers) < 5 {
+				workers[todo] = t + todo - int('A') + 61
 			}
 		}
 
 		mint := []int{}
-		for _, v := range workers {
-			mint = append(mint, v)
+		for _, doneTime := range workers {
+			mint = append(mint, doneTime)
 		}
 		sort.Ints(mint)
 		t = mint[0]
 
-		for k, v := range workers {
-			if v == t {
-				delete(workers, k)
-				delete(rawSteps2, k)
-				for kk, vv := range rawSteps2 {
-					for kkk, _ := range vv {
-						if kkk == k {
-							delete(rawSteps2[kk], kkk)
+		for task, doneTime := range workers {
+			if doneTime == t {
+				delete(workers, task)
+				delete(rawSteps2, task)
+				for todo, blockers := range rawSteps2 {
+					for blocker := range blockers {
+						if blocker == task {
+							delete(rawSteps2[todo], blocker)
 						}
 					}
 				}
